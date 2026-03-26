@@ -38,6 +38,8 @@
             inherit cargoArtifacts;
             postInstall = ''
               install -Dm644 ${./completions/zr.fish} $out/share/fish/vendor_completions.d/zr.fish
+              install -Dm644 ${./completions/zr.bash} $out/share/bash-completion/completions/zr
+              install -Dm644 ${./completions/_zr} $out/share/zsh/site-functions/_zr
             '';
           });
       in {

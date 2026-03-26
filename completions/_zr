@@ -1,0 +1,26 @@
+#compdef zr
+
+# Zsh completions for zr
+# Source arg: complete from zoxide entries
+# Destination arg: complete from zoxide entries + filesystem dirs
+
+_zr_zoxide_paths() {
+    local -a paths
+    paths=(${(f)"$(zoxide query -ls 2>/dev/null | sed 's/^[[:space:]]*[0-9.]*[[:space:]]*//')"})
+    compadd -a paths
+}
+
+_zr() {
+    local -a args
+    args=(
+        '(-n --dry-run)'{-n,--dry-run}'[Preview changes without executing]'
+        '(-v --verbose)'{-v,--verbose}'[Show each zoxide entry being updated]'
+        '--completions[Generate shell completions]:shell:(bash elvish fish powershell zsh)'
+        '(-h --help)'{-h,--help}'[Print help]'
+        '1:source directory:_zr_zoxide_paths'
+        '2:destination:_alternative "zoxide:zoxide path:_zr_zoxide_paths" "directories:directory:_directories"'
+    )
+    _arguments -s $args
+}
+
+_zr "$@"
