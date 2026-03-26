@@ -2,7 +2,6 @@ mod db;
 
 use clap::{CommandFactory, Parser};
 use clap_complete::Shell;
-use std::path::PathBuf;
 use std::{fs, process};
 
 #[derive(Parser)]
@@ -60,8 +59,9 @@ fn main() {
 }
 
 fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<(), String> {
-    let src = to_absolute(source).map_err(|e| format!("resolving source: {e}"))?;
-    let dst = to_absolute(destination).map_err(|e| format!("resolving destination: {e}"))?;
+    let src = std::path::absolute(source).map_err(|e| format!("resolving source: {e}"))?;
+    let dst =
+        std::path::absolute(destination).map_err(|e| format!("resolving destination: {e}"))?;
 
     let meta = fs::metadata(&src).map_err(|e| format!("source {}: {e}", src.display()))?;
     if !meta.is_dir() {
@@ -123,8 +123,4 @@ fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<
     }
     println!("updated {} zoxide entries", relocated.len());
     Ok(())
-}
-
-fn to_absolute(path: &str) -> std::io::Result<PathBuf> {
-    std::path::absolute(path)
 }

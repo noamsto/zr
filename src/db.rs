@@ -25,12 +25,10 @@ pub struct RelocatedEntry {
     pub rank: f64,
 }
 
-/// Returns true if `path` equals `dir` or is a child of `dir`.
 fn is_match(path: &str, dir: &str) -> bool {
     path == dir || (path.starts_with(dir) && path.as_bytes().get(dir.len()) == Some(&b'/'))
 }
 
-/// Rewrites `path` by replacing `old_prefix` with `new_prefix`.
 /// Caller must ensure `is_match(path, old_prefix)` is true.
 pub fn rewrite_path(path: &str, old_prefix: &str, new_prefix: &str) -> String {
     if path == old_prefix {
