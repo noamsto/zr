@@ -1,5 +1,9 @@
 # zr
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Built with Nix](https://img.shields.io/badge/built%20with-nix-5277C3?logo=nixos)](https://nixos.org)
+[![Rust](https://img.shields.io/badge/rust-stable-orange?logo=rust)](https://www.rust-lang.org)
+
 Move directories while preserving [zoxide](https://github.com/ajeetdsouza/zoxide) scores.
 
 `zr` reads zoxide's database directly, rewrites matching paths (including all children), and saves it back — preserving both rank and last-accessed time. No shelling out, no score drift.
