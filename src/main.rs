@@ -75,17 +75,26 @@ fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<
         return Err(format!("{} is not a directory", src.display()));
     }
 
-    if dst.exists() {
-        return Err(format!("destination {} already exists", dst.display()));
-    }
-
-    let dst_parent = dst.parent().ok_or("destination has no parent")?;
-    if !dst_parent.exists() {
-        return Err(format!(
-            "destination parent {} does not exist",
-            dst_parent.display()
-        ));
-    }
+    // If destination is an existing directory, move source into it (like mv).
+    let dst = if dst.is_dir() {
+        let name = src
+            .file_name()
+            .ok_or("source has no file name")?;
+        let into = dst.join(name);
+        if into.exists() {
+            return Err(format!("destination {} already exists", into.display()));
+        }
+        into
+    } else {
+        let dst_parent = dst.parent().ok_or("destination has no parent")?;
+        if !dst_parent.exists() {
+            return Err(format!(
+                "destination parent {} does not exist",
+                dst_parent.display()
+            ));
+        }
+        dst
+    };
 
     let src_str = src.to_string_lossy();
     let dst_str = dst.to_string_lossy();
