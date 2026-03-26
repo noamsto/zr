@@ -1,0 +1,16 @@
+[package]
+name = "zr"
+version = "0.1.0"
+edition = "2024"
+description = "Relocate directories while preserving zoxide scores"
+license = "MIT"
+
+[dependencies]
+bincode = "1.3"
+clap = { version = "4", features = ["derive"] }
+clap_complete = "4"
+serde = { version = "1", features = ["derive"] }
+
+[profile.release]
+lto = true
+strip = true
