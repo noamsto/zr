@@ -21,7 +21,7 @@ zr -n ~/projects/old-name ~/projects/new-name
 zr -v ~/projects/old-name ~/projects/new-name
 ```
 
-### Dry run output
+### Dry Run Output
 
 ```
 dry run — no changes will be made
@@ -63,7 +63,7 @@ cargo install --git https://github.com/noamsto/zr
 
 For completions, run `zr --completions <shell>` and place the output in the appropriate directory for your shell.
 
-## How it works
+## How It Works
 
 1. Validates source exists and destination doesn't
 2. Reads zoxide's binary database (`db.zo`) directly
@@ -73,15 +73,15 @@ For completions, run `zr --completions <shell>` and place the output in the appr
 
 Both **rank** and **last_accessed** are preserved exactly — no recalculation, no score inflation from `zoxide add`.
 
-## Shell completions
+## Shell Completions
 
 Both positional arguments autocomplete from zoxide entries. The destination also completes filesystem directories.
 
-| Shell | Installed to |
-|-------|-------------|
+| Shell | Installed to                              |
+| ----- | ----------------------------------------- |
 | Fish  | `share/fish/vendor_completions.d/zr.fish` |
-| Bash  | `share/bash-completion/completions/zr` |
-| Zsh   | `share/zsh/site-functions/_zr` |
+| Bash  | `share/bash-completion/completions/zr`    |
+| Zsh   | `share/zsh/site-functions/_zr`            |
 
 ## Development
 
@@ -92,7 +92,7 @@ nix fmt            # format nix + rust
 nix build          # reproducible build
 ```
 
-## Why not `zoxide add --score`?
+## Why Not `zoxide add --score`?
 
 `zoxide add --score` sets the **rank**, but `zoxide query -ls` shows the **frecency** (rank multiplied by a time-decay factor). Doing `remove` + `add` resets `last_accessed` to now, which inflates the displayed score. `zr` avoids this by editing the database directly.
 
