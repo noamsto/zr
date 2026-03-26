@@ -81,11 +81,11 @@ Both **rank** and **last_accessed** are preserved exactly — no recalculation, 
 
 Both positional arguments autocomplete from zoxide entries. The destination also completes filesystem directories.
 
-| Shell | Installed to |
+| Shell | Installed to                              |
 | ----- | ----------------------------------------- |
-| Fish | `share/fish/vendor_completions.d/zr.fish` |
-| Bash | `share/bash-completion/completions/zr` |
-| Zsh | `share/zsh/site-functions/_zr` |
+| Fish  | `share/fish/vendor_completions.d/zr.fish` |
+| Bash  | `share/bash-completion/completions/zr`    |
+| Zsh   | `share/zsh/site-functions/_zr`            |
 
 ## Development
 

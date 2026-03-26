@@ -61,7 +61,6 @@
           projectRootFile = "flake.nix";
           programs = {
             alejandra.enable = true;
-            mdformat.enable = true;
             rustfmt.enable = true;
           };
         };
