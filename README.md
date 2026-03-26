@@ -70,10 +70,10 @@ For completions, run `zr --completions <shell>` and place the output in the appr
 ## How It Works
 
 1. Validates source exists and destination doesn't
-2. Reads zoxide's binary database (`db.zo`) directly
-3. Moves the directory (`rename(2)`)
-4. Rewrites all matching paths in the database (exact match + children)
-5. Atomically saves the updated database (write to tmp, then rename)
+1. Reads zoxide's binary database (`db.zo`) directly
+1. Moves the directory (`rename(2)`)
+1. Rewrites all matching paths in the database (exact match + children)
+1. Atomically saves the updated database (write to tmp, then rename)
 
 Both **rank** and **last_accessed** are preserved exactly — no recalculation, no score inflation from `zoxide add`.
 
@@ -81,11 +81,11 @@ Both **rank** and **last_accessed** are preserved exactly — no recalculation, 
 
 Both positional arguments autocomplete from zoxide entries. The destination also completes filesystem directories.
 
-| Shell | Installed to                              |
+| Shell | Installed to |
 | ----- | ----------------------------------------- |
-| Fish  | `share/fish/vendor_completions.d/zr.fish` |
-| Bash  | `share/bash-completion/completions/zr`    |
-| Zsh   | `share/zsh/site-functions/_zr`            |
+| Fish | `share/fish/vendor_completions.d/zr.fish` |
+| Bash | `share/bash-completion/completions/zr` |
+| Zsh | `share/zsh/site-functions/_zr` |
 
 ## Development
 
