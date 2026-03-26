@@ -9,15 +9,24 @@
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
 
+      imports = [
+        inputs.treefmt-nix.flakeModule
+      ];
+
       perSystem = {
         pkgs,
         system,
+        config,
         ...
       }: let
         overlays = [(import inputs.rust-overlay)];
@@ -48,9 +57,18 @@
           zr = zr;
         };
 
+        treefmt = {
+          projectRootFile = "flake.nix";
+          programs = {
+            alejandra.enable = true;
+            rustfmt.enable = true;
+          };
+        };
+
         devShells.default = craneLib.devShell {
           packages = [
             pkgs.cargo-watch
+            config.treefmt.build.wrapper
           ];
           inputsFrom = [zr];
         };
