@@ -83,19 +83,19 @@ fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<
     let src_str = src.to_string_lossy();
     let dst_str = dst.to_string_lossy();
 
-    let mut db = db::Database::open().map_err(|e| format!("reading zoxide database: {e}"))?;
+    let mut database = db::Database::open().map_err(|e| format!("reading zoxide database: {e}"))?;
 
     if dry_run {
         println!("dry run — no changes will be made\n");
         println!("move: {} → {}\n", src_str, dst_str);
 
-        let matched = db.matching_paths(&src_str);
+        let matched = database.matching_paths(&src_str);
         if matched.is_empty() {
             println!("no zoxide entries to update");
         } else {
             println!("zoxide entries to update ({}):", matched.len());
             for d in &matched {
-                let new_path = rewrite_path(&d.path, &src_str, &dst_str);
+                let new_path = db::rewrite_path(&d.path, &src_str, &dst_str);
                 println!("  rank:{:.1}  {} → {}", d.rank, d.path, new_path);
             }
         }
@@ -104,9 +104,9 @@ fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<
 
     fs::rename(&src, &dst).map_err(|e| format!("moving directory: {e}"))?;
 
-    let relocated = db.relocate_paths(&src_str, &dst_str);
+    let relocated = database.relocate_paths(&src_str, &dst_str);
 
-    if let Err(e) = db.save() {
+    if let Err(e) = database.save() {
         eprintln!("warning: directory moved but zoxide db update failed: {e}");
         eprintln!("you may need to manually update zoxide entries");
         return Err(e.to_string());
@@ -125,21 +125,6 @@ fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<
     Ok(())
 }
 
-fn rewrite_path(path: &str, old: &str, new: &str) -> String {
-    let old_norm = old.trim_end_matches('/');
-    let new_norm = new.trim_end_matches('/');
-    if path == old_norm {
-        new_norm.to_string()
-    } else {
-        format!("{new_norm}{}", &path[old_norm.len()..])
-    }
-}
-
 fn to_absolute(path: &str) -> std::io::Result<PathBuf> {
-    let p = PathBuf::from(path);
-    if p.is_absolute() {
-        Ok(p)
-    } else {
-        Ok(std::env::current_dir()?.join(p))
-    }
+    std::path::absolute(path)
 }
