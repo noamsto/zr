@@ -106,10 +106,12 @@ fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<
 
     let relocated = database.relocate_paths(&src_str, &dst_str);
 
-    if let Err(e) = database.save() {
-        eprintln!("warning: directory moved but zoxide db update failed: {e}");
-        eprintln!("you may need to manually update zoxide entries");
-        return Err(e.to_string());
+    if !relocated.is_empty() {
+        if let Err(e) = database.save() {
+            eprintln!("warning: directory moved but zoxide db update failed: {e}");
+            eprintln!("you may need to manually update zoxide entries");
+            return Err(e.to_string());
+        }
     }
 
     println!("moved {} → {}", src_str, dst_str);
@@ -121,6 +123,8 @@ fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<
             );
         }
     }
-    println!("updated {} zoxide entries", relocated.len());
+    if !relocated.is_empty() {
+        println!("updated {} zoxide entries", relocated.len());
+    }
     Ok(())
 }
