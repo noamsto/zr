@@ -100,6 +100,10 @@ nix build          # reproducible build
 
 `zoxide add --score` sets the **rank**, but `zoxide query -ls` shows the **frecency** (rank multiplied by a time-decay factor). Doing `remove` + `add` resets `last_accessed` to now, which inflates the displayed score. `zr` avoids this by editing the database directly.
 
+## Compatibility
+
+`zr` reads and writes zoxide's binary database format (v3) directly. If zoxide changes its database format in a future release, `zr` may need to be updated. Currently tested with zoxide 0.9.x.
+
 ## License
 
 MIT
