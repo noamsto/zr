@@ -36,6 +36,9 @@
         zr = craneLib.buildPackage (commonArgs
           // {
             inherit cargoArtifacts;
+            postInstall = ''
+              install -Dm644 ${./completions/zr.fish} $out/share/fish/vendor_completions.d/zr.fish
+            '';
           });
       in {
         packages = {
