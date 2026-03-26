@@ -58,6 +58,13 @@ fn main() {
     }
 }
 
+fn tilde(path: &str) -> String {
+    match std::env::var("HOME") {
+        Ok(home) if path.starts_with(&home) => format!("~{}", &path[home.len()..]),
+        _ => path.to_string(),
+    }
+}
+
 fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<(), String> {
     let src = std::path::absolute(source).map_err(|e| format!("resolving source: {e}"))?;
     let dst =
@@ -87,7 +94,7 @@ fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<
 
     if dry_run {
         println!("dry run — no changes will be made\n");
-        println!("move: {} → {}\n", src_str, dst_str);
+        println!("move: {} → {}\n", tilde(&src_str), tilde(&dst_str));
 
         let matched = database.matching_paths(&src_str);
         if matched.is_empty() {
@@ -96,7 +103,12 @@ fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<
             println!("zoxide entries to update ({}):", matched.len());
             for d in &matched {
                 let new_path = db::rewrite_path(&d.path, &src_str, &dst_str);
-                println!("  rank:{:.1}  {} → {}", d.rank, d.path, new_path);
+                println!(
+                    "  rank:{:.1}  {} → {}",
+                    d.rank,
+                    tilde(&d.path),
+                    tilde(&new_path)
+                );
             }
         }
         return Ok(());
@@ -114,12 +126,14 @@ fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<
         }
     }
 
-    println!("moved {} → {}", src_str, dst_str);
+    println!("moved {} → {}", tilde(&src_str), tilde(&dst_str));
     if verbose {
         for r in &relocated {
             println!(
                 "  zoxide: {} → {} (rank: {:.1})",
-                r.old_path, r.new_path, r.rank
+                tilde(&r.old_path),
+                tilde(&r.new_path),
+                r.rank
             );
         }
     }
