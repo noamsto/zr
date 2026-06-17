@@ -77,9 +77,7 @@ fn run(source: &str, destination: &str, dry_run: bool, verbose: bool) -> Result<
 
     // If destination is an existing directory, move source into it (like mv).
     let dst = if dst.is_dir() {
-        let name = src
-            .file_name()
-            .ok_or("source has no file name")?;
+        let name = src.file_name().ok_or("source has no file name")?;
         let into = dst.join(name);
         if into.exists() {
             return Err(format!("destination {} already exists", into.display()));
