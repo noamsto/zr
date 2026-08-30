@@ -4,6 +4,12 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      # db.zo is zoxide's file, not ours; its byte layout is whatever bincode
+      # version upstream zoxide pins (still 1.3). Moving off 1.x re-encodes a
+      # database the user shares with zoxide.
+      - dependency-name: "bincode"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "nix"
     directory: "/"
     schedule:
